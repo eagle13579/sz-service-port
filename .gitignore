@@ -2,6 +2,7 @@
 node_modules/
 npm-debug.log
 yarn-error.log
+package-lock.json
 
 # Environment variables
 .env
@@ -11,6 +12,8 @@ yarn-error.log
 # Build outputs
 dist/
 build/
+*.min.js
+*.min.css
 
 # IDE
 .vscode/
@@ -30,12 +33,16 @@ logs/
 # Temporary files
 tmp/
 temp/
+temp_backup/
 *.tmp
 
 # Uploads
 uploads/
 *.zip
 *.gz
+*.tar
+*.rar
+*.7z
 
 # Database backups
 *.sql.backup
@@ -43,3 +50,12 @@ uploads/
 
 # CodeBuddy
 .codebuddy/
+
+# Temporary HTML files
+*_temp.html
+*.old.html
+
+# Deployment scripts (kept specific ones)
+deploy-tcb.bat
+deploy-tcb.sh
+deploy-github-fix.bat
