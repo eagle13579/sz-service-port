@@ -1,0 +1,14 @@
+{
+  "name": "数智服务港",
+  "version": "1.0.0",
+  "description": "产业带企业的一站式数智化出海助手",
+  "main": "index.html",
+  "scripts": {
+    "deploy": "gh-pages -d gh-pages -b gh-pages"
+  },
+  "homepage": "https://eagle13579.github.io/sz-service-port/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/eagle13579/sz-service-port.git"
+  }
+}
