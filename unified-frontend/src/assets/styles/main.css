@@ -2,36 +2,87 @@
 @tailwind components;
 @tailwind utilities;
 
+/* 导入样式 */
+@import './optimizations.css';
+@import './animations.css';
+
+/* 全局优化 */
+* {
+  scroll-behavior: smooth;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* 性能优化 */
+img,
+video {
+  max-width: 100%;
+  height: auto;
+}
+
+/* 减少重绘 */
+.gpu-accelerated {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* 平滑过渡 */
+* {
+  transition-property: background-color, border-color, color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+/* 禁用不必要的动画 */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 @layer base {
   body {
-    @apply antialiased;
+    @apply bg-gray-50 text-gray-900;
   }
 }
 
 @layer components {
   .btn {
-    @apply px-4 py-2 rounded-md font-medium transition-all duration-200;
+    @apply px-4 py-2 rounded-md font-semibold transition duration-200;
   }
-  
+
   .btn-primary {
-    @apply bg-primary-600 text-white hover:bg-primary-700;
+    @apply bg-blue-600 text-white hover:bg-blue-700;
   }
-  
+
   .btn-secondary {
-    @apply bg-gray-200 text-gray-700 hover:bg-gray-300;
+    @apply bg-gray-200 text-gray-800 hover:bg-gray-300;
   }
-  
+
   .card {
-    @apply bg-white rounded-lg shadow-md p-6;
-  }
-  
-  .input {
-    @apply w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent;
+    @apply bg-white rounded-lg shadow p-6;
   }
 }
 
 @layer utilities {
-  .text-gradient {
-    @apply bg-gradient-to-r from-primary-600 to-purple-600 bg-clip-text text-transparent;
+  .text-primary-600 {
+    color: #2563eb;
+  }
+
+  .bg-primary-600 {
+    background-color: #2563eb;
+  }
+
+  .hover\:bg-primary-700:hover {
+    background-color: #1d4ed8;
+  }
+
+  .focus\:ring-primary-500:focus {
+    --tw-ring-color: #3b82f6;
   }
 }

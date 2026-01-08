@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数智服务港 - 系统测试</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold text-center mb-8 text-gray-800">
+            <i class="fas fa-flask mr-2"></i>数智服务港 - 系统测试
+        </h1>
+
+        <!-- 服务状态 -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+            <h2 class="text-xl font-bold mb-4 text-gray-700">
+                <i class="fas fa-server mr-2"></i>服务状态
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="border rounded-lg p-4">
+                    <h3 class="font-semibold mb-2">前端服务</h3>
+                    <div id="frontend-status" class="text-yellow-500">
+                        <i class="fas fa-spinner fa-spin"></i> 检测中...
+                    </div>
+                </div>
+                <div class="border rounded-lg p-4">
+                    <h3 class="font-semibold mb-2">后端API</h3>
+                    <div id="backend-status" class="text-yellow-500">
+                        <i class="fas fa-spinner fa-spin"></i> 检测中...
+                    </div>
+                </div>
+                <div class="border rounded-lg p-4">
+                    <h3 class="font-semibold mb-2">MySQL数据库</h3>
+                    <div id="database-status" class="text-yellow-500">
+                        <i class="fas fa-spinner fa-spin"></i> 检测中...
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- API测试 -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+            <h2 class="text-xl font-bold mb-4 text-gray-700">
+                <i class="fas fa-plug mr-2"></i>API接口测试
+            </h2>
+            <div class="space-y-4">
+                <button onclick="testHealth()" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+                    <i class="fas fa-heartbeat mr-2"></i>测试健康检查
+                </button>
+                <button onclick="testStats()" class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
+                    <i class="fas fa-chart-bar mr-2"></i>测试统计数据
+                </button>
+                <button onclick="testProducts()" class="w-full bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded">
+                    <i class="fas fa-box mr-2"></i>测试产品列表
+                </button>
+            </div>
+            <div id="api-result" class="mt-4 p-4 bg-gray-50 rounded-lg hidden">
+                <pre class="whitespace-pre-wrap text-sm"></pre>
+            </div>
+        </div>
+
+        <!-- 页面导航 -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+            <h2 class="text-xl font-bold mb-4 text-gray-700">
+                <i class="fas fa-sitemap mr-2"></i>页面导航
+            </h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <a href="http://localhost:5173" target="_blank" class="block bg-blue-100 hover:bg-blue-200 text-blue-800 text-center py-3 px-4 rounded-lg">
+                    <i class="fas fa-home mb-2"></i>
+                    <div>主页</div>
+                </a>
+                <a href="http://localhost:5173/#/login" target="_blank" class="block bg-green-100 hover:bg-green-200 text-green-800 text-center py-3 px-4 rounded-lg">
+                    <i class="fas fa-sign-in-alt mb-2"></i>
+                    <div>登录</div>
+                </a>
+                <a href="http://localhost:5173/#/register" target="_blank" class="block bg-yellow-100 hover:bg-yellow-200 text-yellow-800 text-center py-3 px-4 rounded-lg">
+                    <i class="fas fa-user-plus mb-2"></i>
+                    <div>注册</div>
+                </a>
+                <a href="http://localhost:5173/#/member/dashboard" target="_blank" class="block bg-purple-100 hover:bg-purple-200 text-purple-800 text-center py-3 px-4 rounded-lg">
+                    <i class="fas fa-user mb-2"></i>
+                    <div>会员中心</div>
+                </a>
+                <a href="http://localhost:5173/#/supplier/dashboard" target="_blank" class="block bg-orange-100 hover:bg-orange-200 text-orange-800 text-center py-3 px-4 rounded-lg">
+                    <i class="fas fa-building mb-2"></i>
+                    <div>供应商</div>
+                </a>
+                <a href="http://localhost:5173/#/member/tasks" target="_blank" class="block bg-pink-100 hover:bg-pink-200 text-pink-800 text-center py-3 px-4 rounded-lg">
+                    <i class="fas fa-tasks mb-2"></i>
+                    <div>任务大厅</div>
+                </a>
+                <a href="http://localhost:5173/#/supplier/products" target="_blank" class="block bg-teal-100 hover:bg-teal-200 text-teal-800 text-center py-3 px-4 rounded-lg">
+                    <i class="fas fa-boxes mb-2"></i>
+                    <div>产品管理</div>
+                </a>
+                <a href="http://localhost:5173/#/admin/dashboard" target="_blank" class="block bg-red-100 hover:bg-red-200 text-red-800 text-center py-3 px-4 rounded-lg">
+                    <i class="fas fa-cog mb-2"></i>
+                    <div>管理后台</div>
+                </a>
+            </div>
+        </div>
+
+        <!-- 测试报告 -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-xl font-bold mb-4 text-gray-700">
+                <i class="fas fa-clipboard-list mr-2"></i>测试报告
+            </h2>
+            <div id="test-report" class="space-y-2">
+                <p class="text-gray-500">点击上方按钮开始测试...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 检查服务状态
+        async function checkServices() {
+            // 前端
+            try {
+                await fetch('http://localhost:5173');
+                document.getElementById('frontend-status').innerHTML = '<i class="fas fa-check-circle text-green-500"></i> 运行正常';
+            } catch (e) {
+                document.getElementById('frontend-status').innerHTML = '<i class="fas fa-times-circle text-red-500"></i> 无法访问';
+            }
+
+            // 后端
+            try {
+                const res = await fetch('http://localhost:3002/health');
+                const data = await res.json();
+                if (data.status === 'ok') {
+                    document.getElementById('backend-status').innerHTML = '<i class="fas fa-check-circle text-green-500"></i> 运行正常';
+                } else {
+                    document.getElementById('backend-status').innerHTML = '<i class="fas fa-exclamation-circle text-yellow-500"></i> 数据库未连接';
+                }
+            } catch (e) {
+                document.getElementById('backend-status').innerHTML = '<i class="fas fa-times-circle text-red-500"></i> 无法访问';
+            }
+
+            // 数据库
+            try {
+                const res = await fetch('http://localhost:3002/health');
+                const data = await res.json();
+                if (data.database === 'connected') {
+                    document.getElementById('database-status').innerHTML = '<i class="fas fa-check-circle text-green-500"></i> 已连接';
+                } else {
+                    document.getElementById('database-status').innerHTML = '<i class="fas fa-exclamation-circle text-yellow-500"></i> 未连接';
+                }
+            } catch (e) {
+                document.getElementById('database-status').innerHTML = '<i class="fas fa-times-circle text-red-500"></i> 无法访问';
+            }
+        }
+
+        // 测试健康检查
+        async function testHealth() {
+            showResult('正在测试健康检查...', 'loading');
+            try {
+                const res = await fetch('http://localhost:3002/health');
+                const data = await res.json();
+                showResult(JSON.stringify(data, null, 2), 'success');
+                addReport('健康检查', '通过', data.database === 'connected');
+            } catch (e) {
+                showResult('错误: ' + e.message, 'error');
+                addReport('健康检查', '失败', false);
+            }
+        }
+
+        // 测试统计数据
+        async function testStats() {
+            showResult('正在测试统计数据...', 'loading');
+            try {
+                const res = await fetch('http://localhost:3002/api/stats/overview');
+                const data = await res.json();
+                showResult(JSON.stringify(data, null, 2), 'success');
+                addReport('统计数据', '通过', data.code === 200);
+            } catch (e) {
+                showResult('错误: ' + e.message, 'error');
+                addReport('统计数据', '失败', false);
+            }
+        }
+
+        // 测试产品列表
+        async function testProducts() {
+            showResult('正在测试产品列表...', 'loading');
+            try {
+                const res = await fetch('http://localhost:3002/api/products');
+                const data = await res.json();
+                showResult(JSON.stringify(data, null, 2), 'success');
+                addReport('产品列表', '通过', data.code === 200);
+            } catch (e) {
+                showResult('错误: ' + e.message, 'error');
+                addReport('产品列表', '失败', false);
+            }
+        }
+
+        // 显示结果
+        function showResult(text, type) {
+            const resultDiv = document.getElementById('api-result');
+            resultDiv.classList.remove('hidden');
+            const pre = resultDiv.querySelector('pre');
+            pre.textContent = text;
+
+            if (type === 'success') {
+                pre.className = 'whitespace-pre-wrap text-sm text-green-600';
+            } else if (type === 'error') {
+                pre.className = 'whitespace-pre-wrap text-sm text-red-600';
+            } else {
+                pre.className = 'whitespace-pre-wrap text-sm text-blue-600';
+            }
+        }
+
+        // 添加报告
+        function addReport(name, status, passed) {
+            const reportDiv = document.getElementById('test-report');
+            const time = new Date().toLocaleTimeString();
+            const icon = passed ? '<i class="fas fa-check-circle text-green-500"></i>' : '<i class="fas fa-times-circle text-red-500"></i>';
+            
+            if (reportDiv.querySelector('p.text-gray-500')) {
+                reportDiv.innerHTML = '';
+            }
+
+            reportDiv.innerHTML += `
+                <div class="flex justify-between items-center p-3 ${passed ? 'bg-green-50' : 'bg-red-50'} rounded-lg">
+                    <div class="flex items-center">
+                        <span class="mr-3">${icon}</span>
+                        <span class="font-medium">${name}</span>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <span class="${passed ? 'text-green-600' : 'text-red-600'} font-semibold">${status}</span>
+                        <span class="text-gray-400 text-sm">${time}</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        // 页面加载时检查服务
+        window.onload = function() {
+            checkServices();
+            setInterval(checkServices, 30000); // 每30秒刷新一次
+        };
+    </script>
+</body>
+</html>

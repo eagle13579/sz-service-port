@@ -1,109 +1,120 @@
 <template>
-  <div class="min-h-screen bg-gray-50">
-    <!-- 顶部横幅 -->
-    <div class="bg-gradient-to-r from-primary-600 to-purple-600 text-white py-8">
-      <div class="container mx-auto px-6">
-        <div class="flex flex-col md:flex-row items-center justify-between">
-          <div>
-            <h1 class="text-3xl font-bold mb-2">欢迎，{{ member?.nickname || user?.username }}</h1>
-            <p class="text-gray-100">
-              {{ getMemberType(member?.member_type) }} | 信用分: {{ member?.credit_score || 0 }} | 积分: {{ member?.points || 0 }}
-            </p>
-          </div>
-          <div class="mt-4 md:mt-0 flex space-x-4">
-            <div class="text-center bg-white/10 rounded-lg p-4">
-              <div class="text-2xl font-bold">{{ member?.task_count || 0 }}</div>
-              <div class="text-sm">完成任务</div>
-            </div>
-            <div class="text-center bg-white/10 rounded-lg p-4">
-              <div class="text-2xl font-bold">¥{{ member?.total_income || 0 }}</div>
-              <div class="text-sm">总收益</div>
-            </div>
-          </div>
+  <div class="min-h-screen bg-gray-50 py-8">
+    <div class="container mx-auto px-6">
+      <!-- Page Header -->
+      <div class="mb-8 flex items-center justify-between">
+        <div>
+          <h1 class="text-3xl font-bold text-gray-800">会员中心</h1>
+          <p class="text-gray-600 mt-2">欢迎回来，{{ authStore.user?.username }}</p>
+        </div>
+        <div class="flex items-center space-x-2">
+          <StatusBadge status="success" label="正常" />
         </div>
       </div>
-    </div>
-    
-    <!-- 主要内容 -->
-    <div class="container mx-auto px-6 py-8">
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <!-- 左侧导航 -->
-        <div class="lg:col-span-1">
-          <div class="card">
-            <h3 class="text-lg font-semibold mb-4">会员中心</h3>
-            <nav class="space-y-2">
-              <router-link to="/member" class="block px-4 py-2 rounded-md bg-primary-50 text-primary-700">
-                <i class="fas fa-home mr-2"></i>概览
-              </router-link>
-              <router-link to="/member/tasks" class="block px-4 py-2 rounded-md hover:bg-gray-100 text-gray-700">
-                <i class="fas fa-tasks mr-2"></i>任务大厅
-              </router-link>
-              <router-link to="/member/my-tasks" class="block px-4 py-2 rounded-md hover:bg-gray-100 text-gray-700">
-                <i class="fas fa-list-check mr-2"></i>我的任务
-              </router-link>
-              <router-link to="/member/activities" class="block px-4 py-2 rounded-md hover:bg-gray-100 text-gray-700">
-                <i class="fas fa-calendar-alt mr-2"></i>活动中心
-              </router-link>
-            </nav>
+
+      <!-- Stats Cards -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <StatCard
+          label="积分"
+          :value="stats.points"
+          icon="fas fa-star"
+          color="yellow"
+          :change="12"
+          :progress="75"
+        />
+        <StatCard
+          label="已完成任务"
+          :value="stats.completedTasks"
+          icon="fas fa-check-circle"
+          color="green"
+          :change="8"
+          :progress="60"
+        />
+        <StatCard
+          label="进行中任务"
+          :value="stats.inProgressTasks"
+          icon="fas fa-clock"
+          color="blue"
+          :change="5"
+          :progress="40"
+        />
+        <StatCard
+          label="信用分"
+          :value="stats.creditScore"
+          icon="fas fa-award"
+          color="purple"
+          :change="3"
+          :progress="90"
+        />
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <router-link 
+          to="/member/tasks" 
+          class="group bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+        >
+          <div class="p-6 text-center">
+            <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+              <i class="fas fa-tasks text-blue-600 text-3xl"></i>
+            </div>
+            <h3 class="text-lg font-bold text-gray-800 mb-2">任务大厅</h3>
+            <p class="text-gray-600 text-sm">浏览和领取可用任务</p>
           </div>
+        </router-link>
+        <router-link 
+          to="/member/my-tasks" 
+          class="group bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+        >
+          <div class="p-6 text-center">
+            <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+              <i class="fas fa-list-check text-green-600 text-3xl"></i>
+            </div>
+            <h3 class="text-lg font-bold text-gray-800 mb-2">我的任务</h3>
+            <p class="text-gray-600 text-sm">查看任务进度和完成情况</p>
+          </div>
+        </router-link>
+        <router-link 
+          to="/member/activities" 
+          class="group bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+        >
+          <div class="p-6 text-center">
+            <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+              <i class="fas fa-calendar-alt text-purple-600 text-3xl"></i>
+            </div>
+            <h3 class="text-lg font-bold text-gray-800 mb-2">活动中心</h3>
+            <p class="text-gray-600 text-sm">参与平台活动赚取积分</p>
+          </div>
+        </router-link>
+      </div>
+
+      <!-- Recent Tasks -->
+      <div class="bg-white rounded-xl shadow-md overflow-hidden">
+        <div class="px-6 py-4 border-b bg-gray-50 flex items-center justify-between">
+          <h2 class="text-xl font-bold text-gray-800">最近任务</h2>
+          <router-link to="/member/my-tasks" class="text-blue-600 hover:text-blue-700 text-sm font-medium">
+            查看全部 <i class="fas fa-arrow-right ml-1"></i>
+          </router-link>
         </div>
-        
-        <!-- 右侧内容 -->
-        <div class="lg:col-span-2">
-          <!-- 最新任务 -->
-          <div class="card mb-8">
-            <h3 class="text-lg font-semibold mb-4">最新推荐任务</h3>
-            <div v-if="loading" class="text-center py-8">
-              <i class="fas fa-spinner fa-spin text-3xl text-primary-600"></i>
-            </div>
-            <div v-else-if="tasks.length === 0" class="text-center py-8 text-gray-500">
-              暂无推荐任务
-            </div>
-            <div v-else class="space-y-4">
-              <div v-for="task in tasks" :key="task.id" class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
-                <div class="flex justify-between items-start">
-                  <div class="flex-1">
-                    <h4 class="font-semibold text-gray-800 mb-2">{{ task.task_title }}</h4>
-                    <p class="text-sm text-gray-600 mb-2">{{ task.task_desc }}</p>
-                    <div class="flex items-center space-x-4 text-sm text-gray-500">
-                      <span><i class="fas fa-building mr-1"></i>{{ task.company_name }}</span>
-                      <span><i class="fas fa-coins mr-1"></i>¥{{ task.budget }}</span>
-                      <span><i class="fas fa-clock mr-1"></i>{{ task.deadline }}</span>
-                    </div>
-                  </div>
-                  <router-link :to="`/member/tasks/${task.id}`" class="btn btn-primary ml-4">
-                    查看详情
-                  </router-link>
-                </div>
-              </div>
-            </div>
-            <div class="mt-4 text-center">
-              <router-link to="/member/tasks" class="text-primary-600 hover:text-primary-700 font-medium">
-                查看更多任务 <i class="fas fa-arrow-right ml-1"></i>
-              </router-link>
-            </div>
+        <div class="p-6">
+          <div v-if="recentTasks.length === 0" class="text-center py-12 text-gray-500">
+            <i class="fas fa-inbox text-5xl mb-4 opacity-50"></i>
+            <p class="text-lg">暂无任务记录</p>
           </div>
-          
-          <!-- 我的活动 -->
-          <div class="card">
-            <h3 class="text-lg font-semibold mb-4">我的活动</h3>
-            <div v-if="activities.length === 0" class="text-center py-8 text-gray-500">
-              暂无报名活动
-            </div>
-            <div v-else class="space-y-4">
-              <div v-for="activity in activities" :key="activity.id" class="border border-gray-200 rounded-lg p-4">
-                <h4 class="font-semibold text-gray-800 mb-2">{{ activity.activity_title }}</h4>
-                <div class="flex items-center space-x-4 text-sm text-gray-500">
-                  <span><i class="fas fa-calendar mr-1"></i>{{ formatDate(activity.start_time) }}</span>
-                  <span><i class="fas fa-map-marker-alt mr-1"></i>{{ activity.location }}</span>
-                  <span><i class="fas fa-coins mr-1"></i>¥{{ activity.fee }}</span>
-                </div>
+          <div v-else class="space-y-4">
+            <div 
+              v-for="task in recentTasks" 
+              :key="task.id" 
+              class="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+            >
+              <div class="flex-1">
+                <h3 class="font-semibold text-gray-800 mb-1">{{ task.title }}</h3>
+                <p class="text-sm text-gray-600">{{ task.description }}</p>
               </div>
-            </div>
-            <div class="mt-4 text-center">
-              <router-link to="/member/activities" class="text-primary-600 hover:text-primary-700 font-medium">
-                查看更多活动 <i class="fas fa-arrow-right ml-1"></i>
-              </router-link>
+              <StatusBadge 
+                :status="task.status === 'completed' ? 'success' : task.status === 'in_progress' ? 'processing' : 'default'"
+                :label="getStatusText(task.status)"
+              />
             </div>
           </div>
         </div>
@@ -115,59 +126,43 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useAuthStore } from '@/stores/auth'
-import api from '@/utils/api'
+import StatCard from '@/components/ui/StatCard.vue'
+import StatusBadge from '@/components/ui/StatusBadge.vue'
 
 const authStore = useAuthStore()
-const user = authStore.user
 
-const member = ref(null)
-const tasks = ref([])
-const activities = ref([])
-const loading = ref(false)
+const stats = ref({
+  points: 0,
+  completedTasks: 0,
+  inProgressTasks: 0,
+  creditScore: 0
+})
 
-function getMemberType(type) {
-  const types = {
-    normal: '普通会员',
-    excellent: '优质会员',
-    expert: '专家会员',
-    vip: 'VIP会员'
+const recentTasks = ref([])
+
+const loadStats = async () => {
+  // 模拟数据
+  stats.value = {
+    points: Math.floor(Math.random() * 1000) + 500,
+    completedTasks: Math.floor(Math.random() * 50) + 10,
+    inProgressTasks: Math.floor(Math.random() * 10) + 1,
+    creditScore: Math.floor(Math.random() * 20) + 80
   }
-  return types[type] || '会员'
-}
-
-function formatDate(dateString) {
-  const date = new Date(dateString)
-  return date.toLocaleDateString('zh-CN')
-}
-
-async function fetchData() {
-  loading.value = true
-  try {
-    // 获取会员信息
-    const memberRes = await api.get('/members/me')
-    if (memberRes.code === 200) {
-      member.value = memberRes.data
-    }
-    
-    // 获取推荐任务
-    const tasksRes = await api.get('/tasks?status=published&page=1&pageSize=3')
-    if (tasksRes.code === 200) {
-      tasks.value = tasksRes.data.list
-    }
-    
-    // 获取我的活动
-    const activitiesRes = await api.get('/activities?status=published&page=1&pageSize=3')
-    if (activitiesRes.code === 200) {
-      activities.value = activitiesRes.data.list
-    }
-  } catch (error) {
-    console.error('获取数据失败:', error)
-  } finally {
-    loading.value = false
-  }
+  
+  // 模拟任务
+  recentTasks.value = []
 }
 
 onMounted(() => {
-  fetchData()
+  loadStats()
 })
+
+const getStatusText = (status) => {
+  const texts = {
+    pending: '待领取',
+    in_progress: '进行中',
+    completed: '已完成'
+  }
+  return texts[status] || status
+}
 </script>

@@ -1,110 +1,82 @@
 <template>
   <div class="min-h-screen bg-gray-50 py-8">
     <div class="container mx-auto px-6">
-      <h1 class="text-3xl font-bold text-gray-900 mb-8">管理后台</h1>
+      <h1 class="text-3xl font-bold text-gray-800 mb-8">管理后台</h1>
       
-      <!-- 统计数据 -->
+      <!-- Admin Stats -->
       <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <div class="card">
+        <div class="bg-white rounded-lg shadow p-6">
           <div class="flex items-center justify-between">
             <div>
-              <p class="text-sm text-gray-600">用户总数</p>
-              <p class="text-3xl font-bold text-gray-900">{{ stats.memberCount }}</p>
+              <p class="text-gray-600 text-sm">总用户</p>
+              <p class="text-2xl font-bold text-primary-600">{{ stats.users }}</p>
             </div>
-            <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-              <i class="fas fa-users text-blue-600 text-xl"></i>
-            </div>
+            <i class="fas fa-users text-blue-500 text-3xl opacity-80"></i>
           </div>
         </div>
-        
-        <div class="card">
+        <div class="bg-white rounded-lg shadow p-6">
           <div class="flex items-center justify-between">
             <div>
-              <p class="text-sm text-gray-600">供应商数</p>
-              <p class="text-3xl font-bold text-gray-900">{{ stats.supplierCount }}</p>
+              <p class="text-gray-600 text-sm">供应商</p>
+              <p class="text-2xl font-bold text-green-600">{{ stats.suppliers }}</p>
             </div>
-            <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-              <i class="fas fa-building text-green-600 text-xl"></i>
-            </div>
+            <i class="fas fa-building text-green-500 text-3xl opacity-80"></i>
           </div>
         </div>
-        
-        <div class="card">
+        <div class="bg-white rounded-lg shadow p-6">
           <div class="flex items-center justify-between">
             <div>
-              <p class="text-sm text-gray-600">活跃任务</p>
-              <p class="text-3xl font-bold text-gray-900">{{ stats.activeTaskCount }}</p>
+              <p class="text-gray-600 text-sm">总任务</p>
+              <p class="text-2xl font-bold text-yellow-600">{{ stats.tasks }}</p>
             </div>
-            <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
-              <i class="fas fa-tasks text-purple-600 text-xl"></i>
-            </div>
+            <i class="fas fa-tasks text-yellow-500 text-3xl opacity-80"></i>
           </div>
         </div>
-        
-        <div class="card">
+        <div class="bg-white rounded-lg shadow p-6">
           <div class="flex items-center justify-between">
             <div>
-              <p class="text-sm text-gray-600">总交易额</p>
-              <p class="text-3xl font-bold text-gray-900">¥{{ stats.totalTransaction }}</p>
+              <p class="text-gray-600 text-sm">产品</p>
+              <p class="text-2xl font-bold text-purple-600">{{ stats.products }}</p>
             </div>
-            <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
-              <i class="fas fa-coins text-orange-600 text-xl"></i>
-            </div>
+            <i class="fas fa-box text-purple-500 text-3xl opacity-80"></i>
           </div>
         </div>
       </div>
-      
-      <!-- 待审核 -->
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div class="card">
-          <h3 class="text-lg font-semibold mb-4">待审核供应商 ({{ pendingSuppliers.length }})</h3>
-          <div v-if="pendingSuppliers.length === 0" class="text-center py-8 text-gray-500">
-            暂无待审核供应商
-          </div>
-          <div v-else class="space-y-4">
-            <div v-for="supplier in pendingSuppliers" :key="supplier.id" class="border border-gray-200 rounded-lg p-4">
-              <div class="flex justify-between items-start">
-                <div>
-                  <h4 class="font-semibold text-gray-800">{{ supplier.company_name }}</h4>
-                  <p class="text-sm text-gray-600">联系人: {{ supplier.contact_person }}</p>
-                  <p class="text-sm text-gray-600">电话: {{ supplier.contact_phone }}</p>
-                </div>
-                <div class="flex space-x-2">
-                  <button @click="verifySupplier(supplier.id, 'approved')" class="btn bg-green-600 text-white hover:bg-green-700 text-sm">
-                    通过
-                  </button>
-                  <button @click="verifySupplier(supplier.id, 'rejected')" class="btn bg-red-600 text-white hover:bg-red-700 text-sm">
-                    拒绝
-                  </button>
-                </div>
-              </div>
-            </div>
+
+      <!-- Quick Actions -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div class="bg-white rounded-lg shadow p-6 hover:shadow-lg transition cursor-pointer">
+          <div class="text-center">
+            <i class="fas fa-user-check text-primary-600 text-4xl mb-4"></i>
+            <h3 class="text-lg font-bold text-gray-800 mb-2">用户管理</h3>
+            <p class="text-gray-600 text-sm">管理平台用户和权限</p>
           </div>
         </div>
-        
-        <div class="card">
-          <h3 class="text-lg font-semibold mb-4">待审核产品 ({{ pendingProducts.length }})</h3>
-          <div v-if="pendingProducts.length === 0" class="text-center py-8 text-gray-500">
-            暂无待审核产品
+        <div class="bg-white rounded-lg shadow p-6 hover:shadow-lg transition cursor-pointer">
+          <div class="text-center">
+            <i class="fas fa-building text-green-600 text-4xl mb-4"></i>
+            <h3 class="text-lg font-bold text-gray-800 mb-2">供应商审核</h3>
+            <p class="text-gray-600 text-sm">审核供应商入驻申请</p>
           </div>
-          <div v-else class="space-y-4">
-            <div v-for="product in pendingProducts" :key="product.id" class="border border-gray-200 rounded-lg p-4">
-              <div class="flex justify-between items-start">
-                <div>
-                  <h4 class="font-semibold text-gray-800">{{ product.product_name }}</h4>
-                  <p class="text-sm text-gray-600">{{ product.product_desc }}</p>
-                  <p class="text-sm text-gray-600">价格: ¥{{ product.price }}</p>
-                </div>
-                <div class="flex space-x-2">
-                  <button @click="reviewProduct(product.id, 'approved')" class="btn bg-green-600 text-white hover:bg-green-700 text-sm">
-                    通过
-                  </button>
-                  <button @click="reviewProduct(product.id, 'rejected')" class="btn bg-red-600 text-white hover:bg-red-700 text-sm">
-                    拒绝
-                  </button>
-                </div>
-              </div>
-            </div>
+        </div>
+        <div class="bg-white rounded-lg shadow p-6 hover:shadow-lg transition cursor-pointer">
+          <div class="text-center">
+            <i class="fas fa-chart-line text-purple-600 text-4xl mb-4"></i>
+            <h3 class="text-lg font-bold text-gray-800 mb-2">数据统计</h3>
+            <p class="text-gray-600 text-sm">查看平台运营数据</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Activity -->
+      <div class="bg-white rounded-lg shadow">
+        <div class="p-6 border-b">
+          <h2 class="text-xl font-bold text-gray-800">最近活动</h2>
+        </div>
+        <div class="p-6">
+          <div class="text-center py-8 text-gray-500">
+            <i class="fas fa-history text-4xl mb-4"></i>
+            <p>暂无最近活动</p>
           </div>
         </div>
       </div>
@@ -113,84 +85,26 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from 'vue'
+import { ref, onMounted } from 'vue'
 import api from '@/utils/api'
 
-const stats = reactive({
-  memberCount: 0,
-  supplierCount: 0,
-  activeTaskCount: 0,
-  totalTransaction: 0
+const stats = ref({
+  users: 0,
+  suppliers: 0,
+  tasks: 0,
+  products: 0
 })
 
-const pendingSuppliers = ref([])
-const pendingProducts = ref([])
-
-async function fetchDashboard() {
+const loadStats = async () => {
   try {
-    const response = await api.get('/admin/dashboard')
-    if (response.code === 200) {
-      Object.assign(stats, response.data.overview)
-    }
+    const response = await api.get('/api/stats/overview')
+    stats.value = response.data.data
   } catch (error) {
-    console.error('获取仪表盘数据失败:', error)
-  }
-}
-
-async function fetchPendingItems() {
-  try {
-    const suppliersRes = await api.get('/suppliers?verification_status=pending&page=1&pageSize=10')
-    if (suppliersRes.code === 200) {
-      pendingSuppliers.value = suppliersRes.data.list
-    }
-    
-    const productsRes = await api.get('/products?review_status=pending&page=1&pageSize=10')
-    if (productsRes.code === 200) {
-      pendingProducts.value = productsRes.data.list
-    }
-  } catch (error) {
-    console.error('获取待审核项失败:', error)
-  }
-}
-
-async function verifySupplier(supplierId, status) {
-  try {
-    const response = await api.put(`/admin/suppliers/${supplierId}/verify`, {
-      verification_status: status,
-      verification_remark: status === 'approved' ? '审核通过' : '审核拒绝'
-    })
-    
-    if (response.code === 200) {
-      alert(`供应商${status === 'approved' ? '审核通过' : '审核拒绝'}`)
-      await fetchPendingItems()
-    } else {
-      alert(response.message || '操作失败')
-    }
-  } catch (error) {
-    alert(error.message || '操作失败')
-  }
-}
-
-async function reviewProduct(productId, status) {
-  try {
-    const response = await api.put(`/admin/products/${productId}/review`, {
-      review_status: status,
-      review_remark: status === 'approved' ? '审核通过' : '审核拒绝'
-    })
-    
-    if (response.code === 200) {
-      alert(`产品${status === 'approved' ? '审核通过' : '审核拒绝'}`)
-      await fetchPendingItems()
-    } else {
-      alert(response.message || '操作失败')
-    }
-  } catch (error) {
-    alert(error.message || '操作失败')
+    console.error('Failed to load stats:', error)
   }
 }
 
 onMounted(() => {
-  fetchDashboard()
-  fetchPendingItems()
+  loadStats()
 })
 </script>
